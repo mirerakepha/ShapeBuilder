@@ -1,0 +1,3 @@
+/home/strange/CppProjects/shape-builder/build/CMakeFiles/ShapeBuilder.dir
+/home/strange/CppProjects/shape-builder/build/CMakeFiles/edit_cache.dir
+/home/strange/CppProjects/shape-builder/build/CMakeFiles/rebuild_cache.dir
