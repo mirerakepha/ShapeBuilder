@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 int main()
 {
@@ -21,6 +22,33 @@ int main()
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Escape)
                 window.close();
+
+            // Mouse events       
+            if (event.type == sf::Event::MouseButtonPressed){
+                // Left click
+                if (event.mouseButton.button == sf::Mouse::Left){
+                    std::cout << "Left click: "
+                        << event.mouseButton.x << ", "
+                        << event.mouseButton.y << "\n";
+                }
+                // right click
+                if (event.mouseButton.button == sf::Mouse::Right){
+                    std::cout << "Right Click: "
+                        << event.mouseButton.x << ", "
+                        << event.mouseButton.y << "\n";
+                }
+            }
+            // release mouseButton
+            if (event.type == sf::Event::MouseButtonReleased){
+                std::cout << "Mouse button releaseds";
+            }
+            // scroll wheel
+            if (event.type == sf::Event::MouseWheelScrolled){
+                if (event.mouseWheelScroll.delta > 0)
+                    std::cout << "Scrolled up";
+                else 
+                    std::cout << "Scrolled down";
+            }
         }
 
         // Clear screen with a dark background each frame
