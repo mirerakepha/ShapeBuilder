@@ -7,6 +7,12 @@ int main()
             sf::VideoMode(800, 600),
             "ShapeBuilder"
             );
+
+    // mouse tracker
+    sf::CircleShape cursor(5.f);
+    cursor.setFillColor(sf::Color(255, 100, 100));
+    cursor.setOrigin(5.f, 5.f); // mouse pos
+
      // Main loop — keeps the window open
     while (window.isOpen())
     {
@@ -49,10 +55,19 @@ int main()
                 else 
                     std::cout << "Scrolled down";
             }
+            //RT mouse pos
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+            // track
+            cursor.setPosition(
+                    static_cast<float>(mousePos.x),
+                    static_cast<float>(mousePos.y)
+            );
         }
 
         // Clear screen with a dark background each frame
         window.clear(sf::Color(30, 30, 30));
+        window.draw(cursor); // show mouse tracker
 
         // shapes
 
