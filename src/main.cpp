@@ -4,9 +4,15 @@
 int main()
 {
     sf::RenderWindow window(
-            sf::VideoMode(800, 600),
+            sf::VideoMode(1000, 800),
             "ShapeBuilder"
             );
+
+    // move square (WASD)
+    sf::RectangleShape box(sf::Vector2f(40.f, 40.f));
+    box.setFillColor(sf::Color(100, 100, 255));
+    box.setOrigin(20.f, 20.f);
+    box.setPosition(400.f, 300.f); //center
 
     // mouse tracker
     sf::CircleShape cursor(5.f);
@@ -16,6 +22,10 @@ int main()
     // Drag state
     bool isDragging = false;
     sf::Vector2f dragStart;
+
+    // mvt speed
+    const float baseSpeed = 4.f;
+    const float fastSpeed = 10.f;
 
      // Main loop — keeps the window open
     while (window.isOpen())
@@ -32,6 +42,18 @@ int main()
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Escape)
                 window.close();
+
+            // Keyboard events
+            if (event.type == sf::Event::KeyPressed){
+                // ESC closes
+                if (event.key.code == sf::Keyboard::Escape)
+                    window.close();
+                // reset
+                if (event.key.code == sf::Keyboard::R){
+                    box.setPosition(400.f, 300.f);
+                    std::cout << "Reset\n";
+                }
+            }
 
             // Mouse events       
             if (event.type == sf::Event::MouseButtonPressed){
@@ -86,6 +108,27 @@ int main()
                 isDragging = false;
             }
 
+            // check if shift is held for speed mvt
+            bool shiftHeld = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
+                sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+
+            float speed = shiftHeld ? fastSpeed : baseSpeed;
+
+            //current box pos
+            sf::Vector2f pos = box.getPosition();
+
+            // keys
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) pos.y -= speed;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) pos.y += speed;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) pos.x -= speed;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) pos.x += speed;
+
+            // box stays within the window
+            pos.x = std::max(20.f, std::min(pos.x, 980.f));
+            pos.y = std::max(20.f, std::min(pos.y, 780.f));
+
+            box.setPosition(pos);
+
 
             //RT mouse pos
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -107,6 +150,7 @@ int main()
             cursor.setFillColor(sf::Color(255, 100, 100)); //Red
 
         window.draw(cursor); // show mouse tracker
+        window.draw(box);
 
         // shapes
 
