@@ -13,6 +13,10 @@ int main()
     cursor.setFillColor(sf::Color(255, 100, 100));
     cursor.setOrigin(5.f, 5.f); // mouse pos
 
+    // Drag state
+    bool isDragging = false;
+    sf::Vector2f dragStart;
+
      // Main loop — keeps the window open
     while (window.isOpen())
     {
@@ -55,6 +59,34 @@ int main()
                 else 
                     std::cout << "Scrolled down";
             }
+            
+
+            // ===== dragging =========
+            // start dragging
+            if (event.type == sf::Event::MouseButtonPressed && 
+                    event.mouseButton.button == sf::Mouse::Left){
+                isDragging = true;
+                dragStart = sf::Vector2f(
+                        static_cast<float>(event.mouseButton.x),
+                        static_cast<float>(event.mouseButton.y)
+                        );
+                std::cout << "Drag started: "
+                    << dragStart.x << ", "
+                    << dragStart.y << "\n";
+            }
+            // dgar end
+            if (event.type == sf::Event::MouseButtonReleased &&
+                    event.mouseButton.button == sf::Mouse::Left){
+                if (isDragging) {
+                    sf::Vector2f dragEnd = sf::Vector2f(
+                            static_cast<float>(event.mouseButton.x),
+                            static_cast<float>(event.mouseButton.y)
+                            );
+                }
+                isDragging = false;
+            }
+
+
             //RT mouse pos
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
@@ -67,6 +99,13 @@ int main()
 
         // Clear screen with a dark background each frame
         window.clear(sf::Color(30, 30, 30));
+
+        // change tracker color when draggind
+        if (isDragging)
+            cursor.setFillColor(sf::Color(100, 255, 100)); //Green
+        else
+            cursor.setFillColor(sf::Color(255, 100, 100)); //Red
+
         window.draw(cursor); // show mouse tracker
 
         // shapes
