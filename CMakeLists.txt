@@ -6,5 +6,12 @@ set(CMAKE_EXPORT_COMPILE_COMMAND ON) # GET RID OF ERROR FLAGS IN CPP
 
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-add_executable(ShapeBuilder src/main.cpp)
+add_executable(ShapeBuilder 
+    src/main.cpp
+    src/input/Mouse.cpp
+    src/input/Keyboard.cpp
+    src/shapes/ShapeManager.cpp
+)
+
+target_include_directories(ShapeBuilder PRIVATE src)
 target_link_libraries(ShapeBuilder sfml-graphics sfml-window sfml-system)
