@@ -3,6 +3,8 @@
 #include "input/Mouse.hpp"
 #include "input/Keyboard.hpp"
 #include "shapes/ShapeManager.hpp"
+#include "ui/Dialog.hpp"
+
 
 int main()
 {
@@ -20,6 +22,7 @@ int main()
     Mouse mouse;
     Keyboard keyboard;
     ShapeManager shapes;
+    Dialog dialog(window.getSize());
 
     // Main loop — keeps the window open
     while (window.isOpen())
@@ -31,26 +34,39 @@ int main()
             // close the window
             if (event.type == sf::Event::Closed)
                 window.close();
-
-            // mouse events
-            mouse.handleEvent(event);
-            // Keyboard events
-            keyboard.handleEvent(event, window);
-
-            // hitTest
-            shapes.handleEvent(event, mouse.getPosition());
-
-            // ctrl + Z
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z && event.key.control)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
             {
-                shapes.undo();
+                dialog.toggle();
             }
 
-            // reset
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+            // pass events to the game when dialo isn't open
+            if (!dialog.isOpen())
             {
-                box.setPosition(400.f, 300.f);
+
+                // mouse events
+                mouse.handleEvent(event);
+                // Keyboard events
+                keyboard.handleEvent(event, window);
+
+               // hitTest
+               shapes.handleEvent(event, mouse.getPosition());
+
+                // ctrl + Z
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z && event.key.control)
+                {
+                    shapes.undo();
+                }
+
+                // reset
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+                {
+                    box.setPosition(400.f, 300.f);
+                }
+
             }
+
+            // dialog events independdently
+            dialog.handleEvent(event);
         }
 
         mouse.update(window);
@@ -62,6 +78,7 @@ int main()
         window.draw(box);
 
         mouse.draw(window);
+        dialog.draw(window);
         // display
         window.display();
     }

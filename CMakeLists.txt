@@ -10,8 +10,9 @@ add_executable(ShapeBuilder
     src/main.cpp
     src/input/Mouse.cpp
     src/input/Keyboard.cpp
+    src/ui/Dialog.cpp
     src/shapes/ShapeManager.cpp
 )
 
-target_include_directories(ShapeBuilder PRIVATE src)
+target_include_directories(ShapeBuilder PRIVATE src -Wall -Wextra)
 target_link_libraries(ShapeBuilder sfml-graphics sfml-window sfml-system)
