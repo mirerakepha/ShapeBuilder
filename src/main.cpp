@@ -37,11 +37,8 @@ int main()
             // Keyboard events
             keyboard.handleEvent(event, window);
 
-            // spawn circle on click release
-            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-            {
-                shapes.spawnCircle(mouse.getDragStart());
-            }
+            // hitTest
+            shapes.handleEvent(event, mouse.getPosition());
 
             // ctrl + Z
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z && event.key.control)
@@ -58,6 +55,7 @@ int main()
 
         mouse.update(window);
         keyboard.update(box);
+        shapes.update(mouse.getPosition());
         // Clear screen with a dark background each frame
         window.clear(sf::Color(30, 30, 30));
         shapes.draw(window);

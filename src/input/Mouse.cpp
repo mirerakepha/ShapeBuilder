@@ -17,7 +17,7 @@ void Mouse::handleEvent(const sf::Event& event)
                 static_cast<float>(event.mouseButton.x),
                 static_cast<float>(event.mouseButton.y)
                 );
-        std::cout << "Drag started: ";
+        // std::cout << "Drag started: ";
             //<< m_dragStart.x ", " << m_dragStart.y "\n";
     }
     if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left){

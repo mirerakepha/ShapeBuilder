@@ -2,7 +2,7 @@
 #include <iostream>
 
 Keyboard::Keyboard()
-    : m_baseSpeed(4.f), m_fastSpeed(10.f)
+    : m_baseSpeed(2.f), m_fastSpeed(6.f)
 {}
 
 void Keyboard::handleEvent(const sf::Event& event, sf::RenderWindow& window)
