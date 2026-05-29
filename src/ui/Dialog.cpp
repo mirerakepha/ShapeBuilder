@@ -1,4 +1,6 @@
 #include "Dialog.hpp"
+#include <iostream>
+
 
 Dialog::Dialog(sf::Vector2u windowSize)
     : m_isOpen(false),
@@ -14,7 +16,7 @@ Dialog::Dialog(sf::Vector2u windowSize)
 
     m_panelSize = sf::Vector2f(
             gridWidth + 2 * m_padding,
-            gridHeight + 2 * m_padding
+            gridHeight + 2 * m_padding + 50.f + 20.f
             );
 
     // center panel in the window
@@ -32,6 +34,8 @@ Dialog::Dialog(sf::Vector2u windowSize)
 
     // build the celss
     buildGrid();
+    // button
+    buildButton();
 
 
 }
@@ -60,6 +64,46 @@ void Dialog::buildGrid()
     updateCellColors(); //set initial colors
 }
 
+// button
+void Dialog::buildButton()
+{
+    // fronts from system
+    if (!m_font.loadFromFile("assets/font.ttf"))
+    {
+        std::cerr << "Could not load font\n";
+    }
+
+    float buttonWidth = m_panelSize.x - 2 * m_padding;
+    float buttonHeight = 40.f;
+
+    //button below grid with a 20ps m_gap
+    float buttonX = m_panelPos.x + m_padding;
+    float buttonY = m_panelPos.y + m_panelSize.y - m_padding - buttonHeight;
+
+    m_button.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    m_button.setPosition(buttonX, buttonY);
+    m_button.setFillColor(sf::Color(70, 140, 170));
+    m_button.setOutlineColor(sf::Color(100, 180, 100));
+    m_button.setOutlineThickness(1.f);
+
+    //center text inside the button
+    m_buttonText.setFont(m_font);
+    m_buttonText.setString("Spawn");
+    m_buttonText.setCharacterSize(22);
+    m_buttonText.setFillColor(sf::Color::White);
+
+    // getLocalBound() gives the actual text size
+    sf::FloatRect textBounds = m_buttonText.getGlobalBounds();
+    m_buttonText.setOrigin(
+            textBounds.left + textBounds.width / 2.f,
+            textBounds.top + textBounds.height / 2.f
+            );
+    m_buttonText.setPosition(
+            buttonX + buttonWidth / 2.f,
+            buttonY + buttonHeight / 2.f
+            );
+}
+
 void Dialog::updateCellColors()
 {
     for (int i = 0; i < 9; i++)
@@ -80,6 +124,16 @@ void Dialog::toggle()
 bool Dialog::isOpen() const
 {
     return m_isOpen;
+}
+
+bool Dialog::wasConfirmed()
+{
+    if (m_confirmed)
+    {
+        m_confirmed = false; // reset so it firs only once
+        return true;
+    }
+    return false;
 }
 
 
@@ -118,6 +172,12 @@ void Dialog::handleEvent(const sf::Event& event)
                 break; // one cell per click
             }
         }
+        // check button -> send to main.cpp and close dalog
+        if (m_button.getGlobalBounds().contains(clickPos))
+        {
+            m_confirmed = true;
+            m_isOpen = false;
+        }
     }
 }
 
@@ -130,6 +190,9 @@ void Dialog::draw(sf::RenderWindow& window)
 
     for(const auto& cell : m_cells)
         window.draw(cell);
+
+    window.draw(m_button);
+    window.draw(m_buttonText);
 }
 
 

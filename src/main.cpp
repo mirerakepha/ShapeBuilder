@@ -69,6 +69,21 @@ int main()
             // dialog events independdently
             dialog.handleEvent(event);
         }
+        if (dialog.wasConfirmed())
+        {
+            const auto& cells = dialog.getSelectedCells();
+
+            //print the no of cells selected
+            std::cout << "Spawn pattern: \n";
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 3; col++)
+                {
+                    std::cout << (cells[row * 3 + col] ? "X" : ".");
+                }
+                std::cout << "\n";
+            }
+        }
 
         mouse.update(window);
         keyboard.update(box);

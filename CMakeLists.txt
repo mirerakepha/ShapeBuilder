@@ -16,3 +16,4 @@ add_executable(ShapeBuilder
 
 target_include_directories(ShapeBuilder PRIVATE src -Wall -Wextra)
 target_link_libraries(ShapeBuilder sfml-graphics sfml-window sfml-system)
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

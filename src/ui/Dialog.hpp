@@ -9,6 +9,7 @@ class Dialog
 
         void toggle();
         bool isOpen() const;
+        bool wasConfirmed(); // true when confir button is clicked and reset Dialog
 
         void handleEvent(const sf::Event& event);
         void draw(sf::RenderWindow& window);
@@ -18,9 +19,11 @@ class Dialog
 
     private:
         void buildGrid(); // position 9 boxes inside the Dialog
+        void buildButton(); // button position and style
         void updateCellColors(); // change color when a cell is selected
 
         bool m_isOpen;
+        bool m_confirmed; // true whan spaen block is clicked
         // dark bg panel
         sf::RectangleShape m_panel;
 
@@ -29,6 +32,11 @@ class Dialog
 
         //highlight when selected
         std::array<bool, 9> m_selected;
+
+        //button
+        sf::RectangleShape m_button;
+        sf::Font m_font;
+        sf::Text m_buttonText;
 
         //panel pos and size
         sf::Vector2f m_panelPos;
