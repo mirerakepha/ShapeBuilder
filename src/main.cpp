@@ -34,6 +34,7 @@ int main()
             // close the window
             if (event.type == sf::Event::Closed)
                 window.close();
+
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
             {
                 dialog.toggle();

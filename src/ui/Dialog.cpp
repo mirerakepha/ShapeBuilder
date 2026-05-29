@@ -6,6 +6,8 @@ Dialog::Dialog(sf::Vector2u windowSize)
       m_padding(30.f),
       m_gap(8.f)
 {
+    // initialize as cells are seleceted
+    m_selected.fill(false);
     //panel
     float gridWidth = 3 * m_cellSize + 2 * m_gap;
     float gridHeight = 3 * m_cellSize + 2 * m_gap;
@@ -55,8 +57,20 @@ void Dialog::buildGrid()
             m_cells[index].setOutlineThickness(1.f);
         }
     }
+    updateCellColors(); //set initial colors
 }
 
+void Dialog::updateCellColors()
+{
+    for (int i = 0; i < 9; i++)
+    {
+        if (m_selected[i])
+            m_cells[i].setFillColor(sf::Color(100, 200, 255)); //selected
+        else
+            m_cells[i].setFillColor(sf::Color(70, 70, 90)); // unselected
+                
+    }
+}
 
 void Dialog::toggle()
 {
@@ -69,16 +83,40 @@ bool Dialog::isOpen() const
 }
 
 
+const std::array<bool, 9>& Dialog::getSelectedCells() const
+{
+    return m_selected;
+}
+
 void Dialog::handleEvent(const sf::Event& event)
 {
     if (!m_isOpen) return; // ignore events when closed
 
-    // close on E
+    // close on Escape
     if (event.type == sf::Event::KeyPressed)
     {
         if (event.key.code == sf::Keyboard::Escape)
         {
             m_isOpen = false;
+        }
+    }
+
+    // click cell
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+    {
+        sf::Vector2f clickPos(
+                static_cast<float>(event.mouseButton.x),
+                static_cast<float>(event.mouseButton.y)
+                );
+
+        for (int i = 0; i < 9; i++)
+        {
+            if (m_cells[i].getGlobalBounds().contains(clickPos))
+            {
+                m_selected[i] = !m_selected[i]; // toggle on/off
+                updateCellColors();
+                break; // one cell per click
+            }
         }
     }
 }
