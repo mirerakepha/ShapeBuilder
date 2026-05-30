@@ -1,11 +1,24 @@
 #include "ShapeManager.hpp"
 #include <cmath>
+#include <stddef.h>
 
 
 ShapeManager::ShapeManager()
     : m_dragIndex(-1)   // -1 means nothing is being dragged
 {}
 
+void ShapeManager::spawnBlock(const std::array<bool, 9>& pattern, sf::Vector2f center)
+{
+
+    //block at center 3x3 35px cells 2px gap
+    float offset = (3 * 35.f + 2 * 2.f) / 2.f;
+
+    sf::Vector2f anchor(center.x - offset, center.y - offset);
+    m_blocks.emplace_back(pattern, anchor);
+}
+
+
+/*
 bool ShapeManager::hitTest(const sf::CircleShape& circle, sf::Vector2f point)
 {
     sf::Vector2f center = circle.getPosition();
@@ -19,6 +32,7 @@ bool ShapeManager::hitTest(const sf::CircleShape& circle, sf::Vector2f point)
     // true if mouse is inside the radius
     return distance <= radius;
 }
+*/
 
 void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
 {
@@ -26,16 +40,17 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
     {
         // top drwan circle gets picked up first
-        for (int i = static_cast<int>(m_circles.size()) -1; i >= 0; i--)
+        for (int i = static_cast<int>(m_blocks.size()) -1; i >= 0; i--)
         {
-            if (hitTest(m_circles[i], mousePos))
+            if (m_blocks[i].contains(mousePos))
             {
                 m_dragIndex = i;
                 //record offset so circle doesnt snap to cursor center
-                m_dragOffset = m_circles[i].getPosition() - mousePos;
+                m_dragOffset = m_blocks[i].getPosition() - mousePos;
                 break; //only pick one circle at a time
             }
         }
+        /*
         // if no circle was hit spawn a new one
         if (m_dragIndex == -1)
         {
@@ -48,6 +63,7 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
             m_circles.push_back(circle);
 
         }
+        */
     }
 
     // drop to release
@@ -62,20 +78,20 @@ void ShapeManager::update(sf::Vector2f mousePos)
     // drag a circle
     if (m_dragIndex != -1)
     {
-        m_circles[m_dragIndex].setPosition(mousePos + m_dragOffset);
+        m_blocks[m_dragIndex].setPosition(mousePos + m_dragOffset);
     }
 }
 
 void ShapeManager::undo()
 {
-    if (!m_circles.empty())
-        m_circles.pop_back();
+    if (!m_blocks.empty())
+        m_blocks.pop_back();
 }
 
 void ShapeManager::draw(sf::RenderWindow& window)
 {
-    for (const auto& circle : m_circles)
-        window.draw(circle);
+    for (auto& block : m_blocks)
+        block.draw(window);
 }
 
 

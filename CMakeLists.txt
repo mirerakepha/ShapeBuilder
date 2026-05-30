@@ -10,6 +10,7 @@ add_executable(ShapeBuilder
     src/main.cpp
     src/input/Mouse.cpp
     src/input/Keyboard.cpp
+    src/shapes/Block.cpp
     src/ui/Dialog.cpp
     src/shapes/ShapeManager.cpp
 )

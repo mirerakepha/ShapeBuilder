@@ -24,6 +24,12 @@ int main()
     ShapeManager shapes;
     Dialog dialog(window.getSize());
 
+    // blocks spawn point
+    sf::Vector2f windowCenter(
+            window.getSize().x / 2.f,
+            window.getSize().y / 2.f
+            );
+
     // Main loop — keeps the window open
     while (window.isOpen())
     {
@@ -70,20 +76,8 @@ int main()
             dialog.handleEvent(event);
         }
         if (dialog.wasConfirmed())
-        {
-            const auto& cells = dialog.getSelectedCells();
-
-            //print the no of cells selected
-            std::cout << "Spawn pattern: \n";
-            for (int row = 0; row < 3; row++)
-            {
-                for (int col = 0; col < 3; col++)
-                {
-                    std::cout << (cells[row * 3 + col] ? "X" : ".");
-                }
-                std::cout << "\n";
-            }
-        }
+            shapes.spawnBlock(dialog.getSelectedCells(), windowCenter);
+        
 
         mouse.update(window);
         keyboard.update(box);
