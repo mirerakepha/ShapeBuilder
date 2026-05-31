@@ -81,7 +81,7 @@ int main()
 
         mouse.update(window);
         keyboard.update(box);
-        shapes.update(mouse.getPosition());
+        shapes.update(mouse.getPosition(), window.getSize());
         // Clear screen with a dark background each frame
         window.clear(sf::Color(30, 30, 30));
         shapes.draw(window);

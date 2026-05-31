@@ -18,6 +18,7 @@ class Block
 
         void setPosition(sf::Vector2f pos);
         sf::Vector2f getPosition() const;
+        sf::FloatRect getBounds() const;
         //true if point is inside the square of the block
         bool contains(sf::Vector2f point) const;
         void draw(sf::RenderWindow& window);

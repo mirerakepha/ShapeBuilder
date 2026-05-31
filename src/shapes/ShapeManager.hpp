@@ -10,7 +10,7 @@ class ShapeManager
 
         void spawnBlock(const std::array<bool, 9>& pattern, sf::Vector2f center);
         void handleEvent(const sf::Event& event, sf::Vector2f mousePos);
-        void update(sf::Vector2f mousePos);
+        void update(sf::Vector2f mousePos, sf::Vector2u windowSize);
         void undo();
         void draw(sf::RenderWindow& window);
 

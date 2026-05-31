@@ -73,12 +73,38 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
     }
 }
 
-void ShapeManager::update(sf::Vector2f mousePos)
+void ShapeManager::update(sf::Vector2f mousePos, sf::Vector2u windowSize)
 {
-    // drag a circle
+    // drag a block
     if (m_dragIndex != -1)
     {
         m_blocks[m_dragIndex].setPosition(mousePos + m_dragOffset);
+        //clamp the block inside the window
+        sf::FloatRect bounds = m_blocks[m_dragIndex].getBounds();
+
+        sf::Vector2f pos = m_blocks[m_dragIndex].getPosition();
+
+        // window size
+        float ww = static_cast<float>(windowSize.x);
+        float wh = static_cast<float>(windowSize.y);
+
+        // distance from anchor to edges
+        float toLeft = pos.x - bounds.left;
+        float toTop = pos.y - bounds.top;
+        float toRight = (bounds.left - bounds.width) - pos.x;
+        float toBottom = (bounds.top - bounds.height) - pos.y;
+
+        // clamp such that none of the edges get out of the window
+        if (bounds.left < 0)
+            pos.x = toLeft;
+        if (bounds.top < 0)
+            pos.y = toTop;
+        if (bounds.left + bounds.width > windowSize.x)
+            pos.x = ww - toRight;
+        if (bounds.top + bounds.height > windowSize.y)
+            pos.y = wh - toBottom;
+
+        m_blocks[m_dragIndex].setPosition(pos);
     }
 }
 

@@ -32,6 +32,7 @@ void Keyboard::update(sf::RectangleShape& box)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) pos.y += speed;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) pos.x += speed;
 
+    // the small square doesn't get out of the window
     pos.x = std::max(20.f, std::min(pos.x, 980.f));
     pos.y = std::max(20.f, std::min(pos.y, 780.f));
 

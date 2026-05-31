@@ -1,5 +1,7 @@
 #include "Block.hpp"
 #include <stddef.h>
+#include <limits>
+
 
 Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor)
     : m_anchor(anchor),
@@ -47,6 +49,28 @@ void Block::setPosition(sf::Vector2f pos)
 sf::Vector2f Block::getPosition() const
 {
     return m_anchor;
+}
+
+sf::FloatRect Block::getBounds() const
+{
+    if (m_cells.empty())
+        return sf::FloatRect(m_anchor.x, m_anchor.y, 0.f, 0.f);
+
+    // start with extreme values then shrink to fit
+    float left = std::numeric_limits<float>::max();
+    float right = -std::numeric_limits<float>::max();
+    float top = std::numeric_limits<float>::max();
+    float bottom = -std::numeric_limits<float>::max();
+
+    for (const auto& cell : m_cells)
+    {
+        sf::FloatRect b = cell.shape.getGlobalBounds();
+        left = std::min(left, b.left);
+        right = std::max(right, b.left + b.width);
+        top = std::min(top, b.top);
+        bottom = std::max(bottom, b.top + b.height);
+    }
+    return sf::FloatRect(left, top, right - left, bottom - top);
 }
 
 
