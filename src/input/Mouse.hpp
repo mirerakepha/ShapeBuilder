@@ -14,6 +14,7 @@ class Mouse
         sf::Vector2f getDragStart() const;
         sf::Vector2f getPosition() const;
 
+        sf::Vector2i getScreenPosition() const;
     private:
         sf::CircleShape m_cursor;
         sf::Vector2f m_position;

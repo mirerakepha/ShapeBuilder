@@ -61,3 +61,11 @@ sf::Vector2f Mouse::getPosition() const
 {
     return m_position;
 }
+
+sf::Vector2i Mouse::getScreenPosition() const
+{
+    return sf::Vector2i(
+            static_cast<int>(m_position.x),
+            static_cast<int>(m_position.y)
+            );
+}

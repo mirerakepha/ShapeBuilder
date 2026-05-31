@@ -4,7 +4,7 @@
 #include "input/Keyboard.hpp"
 #include "shapes/ShapeManager.hpp"
 #include "ui/Dialog.hpp"
-
+#include "Camera.hpp"
 
 int main()
 {
@@ -12,24 +12,31 @@ int main()
             sf::VideoMode(1000, 800),
             "ShapeBuilder"
             );
+    window.setFramerateLimit(60);
 
+    /*
     // move square (WASD)
     sf::RectangleShape box(sf::Vector2f(40.f, 40.f));
     box.setFillColor(sf::Color(100, 100, 255));
     box.setOrigin(20.f, 20.f);
     box.setPosition(400.f, 300.f); //center
-
+    */
+    
     Mouse mouse;
     Keyboard keyboard;
     ShapeManager shapes;
     Dialog dialog(window.getSize());
+    Camera camera(window.getSize());
 
+    /*
     // blocks spawn point
     sf::Vector2f windowCenter(
             window.getSize().x / 2.f,
             window.getSize().y / 2.f
             );
+    */
 
+    sf::Vector2f worldMouse;
     // Main loop — keeps the window open
     while (window.isOpen())
     {
@@ -40,6 +47,9 @@ int main()
             // close the window
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            // camera handles scroll
+            camera.handleEvent(event);
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
             {
@@ -56,7 +66,11 @@ int main()
                 keyboard.handleEvent(event, window);
 
                // hitTest
-               shapes.handleEvent(event, mouse.getPosition());
+                worldMouse = camera.screenToWorld(
+                        window,
+                        mouse.getScreenPosition()
+                        );
+               shapes.handleEvent(event, worldMouse);
 
                 // ctrl + Z
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z && event.key.control)
@@ -64,28 +78,48 @@ int main()
                     shapes.undo();
                 }
 
+                /*
                 // reset
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
                 {
                     box.setPosition(400.f, 300.f);
                 }
+                */
 
             }
 
             // dialog events independdently
             dialog.handleEvent(event);
+
         }
         if (dialog.wasConfirmed())
-            shapes.spawnBlock(dialog.getSelectedCells(), windowCenter);
-        
+        {
+            sf::Vector2f worldCenter = camera.screenToWorld(
+                    window,
+                    sf::Vector2i(
+                        window.getSize().x / 2,
+                        window.getSize().y / 2
+                        )
+                    );
+            shapes.spawnBlock(dialog.getSelectedCells(), worldCenter);
+        } 
+
+        worldMouse = camera.screenToWorld(
+                window,
+                mouse.getScreenPosition()
+                );
 
         mouse.update(window);
-        keyboard.update(box);
-        shapes.update(mouse.getPosition(), window.getSize());
+        camera.update();
+        // keyboard.update(box);
+        shapes.update(worldMouse);
         // Clear screen with a dark background each frame
         window.clear(sf::Color(30, 30, 30));
+        // window.draw(box);
+        camera.applyWorldView(window);
         shapes.draw(window);
-        window.draw(box);
+
+        camera.applyUIView(window);
 
         mouse.draw(window);
         dialog.draw(window);

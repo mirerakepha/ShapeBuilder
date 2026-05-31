@@ -9,6 +9,7 @@ ShapeManager::ShapeManager()
 
 void ShapeManager::spawnBlock(const std::array<bool, 9>& pattern, sf::Vector2f center)
 {
+    m_dragIndex = -1; // reset drag state on new spawn
 
     //block at center 3x3 35px cells 2px gap
     float offset = (3 * 35.f + 2 * 2.f) / 2.f;
@@ -73,8 +74,12 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
     }
 }
 
-void ShapeManager::update(sf::Vector2f mousePos, sf::Vector2u windowSize)
+void ShapeManager::update(sf::Vector2f mousePos)
 {
+
+    if (m_dragIndex < 0 || m_dragIndex >= static_cast<int>(m_blocks.size())) return;
+    m_blocks[m_dragIndex].setPosition(mousePos + m_dragOffset);
+    /*
     // drag a block
     if (m_dragIndex != -1)
     {
@@ -106,12 +111,17 @@ void ShapeManager::update(sf::Vector2f mousePos, sf::Vector2u windowSize)
 
         m_blocks[m_dragIndex].setPosition(pos);
     }
+    */
 }
 
 void ShapeManager::undo()
 {
     if (!m_blocks.empty())
+    {
         m_blocks.pop_back();
+        m_dragIndex = -1; // reset incase we deleted the dragged block
+    }
+
 }
 
 void ShapeManager::draw(sf::RenderWindow& window)

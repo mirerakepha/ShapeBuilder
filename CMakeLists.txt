@@ -8,6 +8,7 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 add_executable(ShapeBuilder 
     src/main.cpp
+    src/Camera.cpp
     src/input/Mouse.cpp
     src/input/Keyboard.cpp
     src/shapes/Block.cpp
