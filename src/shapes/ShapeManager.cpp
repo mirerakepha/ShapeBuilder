@@ -74,6 +74,20 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
     }
 }
 
+
+void ShapeManager::spawnMaterialBlock(sf::Color color, sf::Vector2f center)
+{
+    /// a single square
+    std::array<bool, 9> pattern{};
+    pattern[4] = true; //
+
+    m_dragIndex = -1;
+    float offset = (3 * 35.f + 2 * 2.f) / 2.f;
+    sf::Vector2f anchor(center.x - offset, center.y - offset);
+
+    m_blocks.emplace_back(pattern, anchor, color);
+}
+
 void ShapeManager::update(sf::Vector2f mousePos)
 {
 

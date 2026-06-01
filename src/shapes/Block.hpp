@@ -14,7 +14,7 @@ class Block
 {
     public:
         // pattern -> 9 bools from dialog
-        Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor);
+        Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color = sf::Color(100, 180, 255));
 
         void setPosition(sf::Vector2f pos);
         sf::Vector2f getPosition() const;

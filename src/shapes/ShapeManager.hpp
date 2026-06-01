@@ -13,7 +13,7 @@ class ShapeManager
         void update(sf::Vector2f mousePos);
         void undo();
         void draw(sf::RenderWindow& window);
-
+        void spawnMaterialBlock(sf::Color color, sf::Vector2f center);
     private:
         std::vector<Block> m_blocks;
 

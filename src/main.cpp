@@ -101,7 +101,25 @@ int main()
                         window.getSize().y / 2
                         )
                     );
-            shapes.spawnBlock(dialog.getSelectedCells(), worldCenter);
+            if (dialog.getConfirmedTab() == 0)
+            {
+                shapes.spawnBlock(dialog.getSelectedCells(), worldCenter);
+            }
+            else 
+            {
+                // offset each materiala so they dont stack on each other
+                float offsetX = 0.f;
+                for (const auto& mat : dialog.getMaterials())
+                {
+                    for (int i = 0; i < mat.count; i++)
+                    {
+                        sf::Vector2f pos(worldCenter.x + offsetX, worldCenter.y);
+                        shapes.spawnMaterialBlock(mat.color, pos);
+                        offsetX += 50.f;
+                    }
+                }
+                dialog.resetMaterialsCount();
+            }
         } 
 
         worldMouse = camera.screenToWorld(

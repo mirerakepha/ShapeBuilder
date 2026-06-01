@@ -3,7 +3,7 @@
 #include <limits>
 
 
-Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor)
+Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color)
     : m_anchor(anchor),
     m_cellSize(35.f) //ecah square 35x35 px
 {
@@ -25,7 +25,7 @@ Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor)
                     row * (m_cellSize + gap)
                     );
             cell.shape.setSize(sf::Vector2f(m_cellSize, m_cellSize));
-            cell.shape.setFillColor(sf::Color(100, 200, 255));
+            cell.shape.setFillColor(color);
             cell.shape.setOutlineColor(sf::Color(255, 255, 255));
             cell.shape.setOutlineThickness(1.f);
             // world pos == anchor + local offset
