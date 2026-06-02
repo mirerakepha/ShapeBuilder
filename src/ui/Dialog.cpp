@@ -104,7 +104,7 @@ void Dialog::buildTabs()
 void Dialog::buildGrid()
 {
     float startX = m_panelPos.x + m_padding;
-    float startY = m_panelPos.y + m_padding;
+    float startY = m_contentStartY;
 
     for (int row = 0; row < 3; row++)
     {
