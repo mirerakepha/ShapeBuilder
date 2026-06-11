@@ -12,10 +12,17 @@ add_executable(ShapeBuilder
     src/input/Mouse.cpp
     src/input/Keyboard.cpp
     src/shapes/Block.cpp
+    src/ball/Ball.cpp
     src/ui/Dialog.cpp
     src/shapes/ShapeManager.cpp
 )
 
 target_include_directories(ShapeBuilder PRIVATE src -Wall -Wextra)
-target_link_libraries(ShapeBuilder sfml-graphics sfml-window sfml-system)
+target_link_libraries(
+    ShapeBuilder 
+    sfml-graphics 
+    sfml-window 
+    sfml-system 
+    sfml-audio
+)
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

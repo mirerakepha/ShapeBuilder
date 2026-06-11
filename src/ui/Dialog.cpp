@@ -91,7 +91,7 @@ void Dialog::buildTabs()
         m_tabButtons[i].setOutlineThickness(1.f);
         m_tabButtons[i].setOutlineColor(sf::Color(120, 120, 140));
 
-        m_tabLabels[i] = makeText(m_font, labels[i], 10, sf::Color::White);
+        m_tabLabels[i] = makeText(m_font, labels[i], 18, sf::Color::White);
 
         //center the label inside the tab box
         centerTextIn(m_tabLabels[i], sf::FloatRect(x, startY, tabW, tabH));
@@ -161,13 +161,13 @@ void Dialog::buildMaterials()
         entry.box.setOutlineThickness(1.f);
 
         //material name on the right
-        entry.nameText = makeText(m_font, defs[i].name, 9, sf::Color::White);
+        entry.nameText = makeText(m_font, defs[i].name, 12, sf::Color::White);
         entry.nameText.setPosition(
                 startX + boxSize + 10.f,
                 rowY + rowHeight / 2.f - 7.f
                 );
         //count
-        entry.countText = makeText(m_font, "x0", 9, sf::Color(180, 255, 180));
+        entry.countText = makeText(m_font, "x0", 12, sf::Color(180, 255, 180));
         entry.countText.setPosition(
                 rightEdge - 24.f,
                 rowY + rowHeight / 2.f - 7.f
