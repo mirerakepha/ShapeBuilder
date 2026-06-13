@@ -5,6 +5,9 @@
 #include "shapes/ShapeManager.hpp"
 #include "ui/Dialog.hpp"
 #include "Camera.hpp"
+#include "ball/Ball.hpp"
+#include "audio/AudioManager.hpp"
+
 
 int main()
 {
@@ -27,19 +30,18 @@ int main()
     ShapeManager shapes;
     Dialog dialog(window.getSize());
     Camera camera(window.getSize());
+    AudioManager audio;
+    Ball ball;
 
-    /*
-    // blocks spawn point
-    sf::Vector2f windowCenter(
-            window.getSize().x / 2.f,
-            window.getSize().y / 2.f
-            );
-    */
+    sf::Clock clock; // real time elapsed btwn frame
 
     sf::Vector2f worldMouse;
     // Main loop — keeps the window open
     while (window.isOpen())
     {
+        float dt = clock.restart().asSeconds(); // seconds since last frame
+        if (dt > 0.05f) dt = 0.05f;
+
         // Event loop — checks for stuff like close window
         sf::Event event;
         while (window.pollEvent(event))
@@ -55,6 +57,17 @@ int main()
             {
                 dialog.toggle();
             }
+
+            // space bar activates ball
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+            {
+                if (!ball.isActive())
+                    ball.setActive(true);
+            }
+
+            // r resets the ball
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+                ball.reset();
 
             // pass events to the game when dialo isn't open
             if (!dialog.isOpen())
@@ -129,13 +142,14 @@ int main()
 
         mouse.update(window);
         camera.update();
-        // keyboard.update(box);
         shapes.update(worldMouse);
-        // Clear screen with a dark background each frame
+        ball.update(dt);
+
         window.clear(sf::Color(30, 30, 30));
-        // window.draw(box);
+        
         camera.applyWorldView(window);
         shapes.draw(window);
+        ball.draw(window);
 
         camera.applyUIView(window);
 

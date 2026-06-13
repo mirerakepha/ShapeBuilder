@@ -14,6 +14,7 @@ add_executable(ShapeBuilder
     src/shapes/Block.cpp
     src/ball/Ball.cpp
     src/ui/Dialog.cpp
+    src/audio/AudioManager.cpp
     src/shapes/ShapeManager.cpp
 )
 

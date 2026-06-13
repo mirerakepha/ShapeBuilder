@@ -6,8 +6,8 @@ class Ball
     public: 
         Ball();
         void reset();
-        void set_active(bool active);
-        void is_active() const; // if true then ball starts to move
+        void setActive(bool active);
+        bool isActive() const; // if true then ball starts to move
 
         void update(float dt); //delta time
         void draw(sf::RenderWindow& window);
@@ -15,8 +15,8 @@ class Ball
         sf::Vector2f getPosition() const;
         float getRadius() const;
     private:
-        sf::CiicleShape m_shape;
-        sf::Vector2f velocity;
+        sf::CircleShape m_shape;
+        sf::Vector2f m_velocity;
         bool m_active;
 
         static constexpr float RADIUS = 18.f;
@@ -24,5 +24,5 @@ class Ball
         static constexpr float SPAWN_Y = 60.f;
 
 
-}
+};
 
