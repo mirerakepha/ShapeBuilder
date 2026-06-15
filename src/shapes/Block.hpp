@@ -14,7 +14,12 @@ class Block
 {
     public:
         // pattern -> 9 bools from dialog
-        Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color = sf::Color(100, 180, 255));
+        Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color = sf::Color(100, 180, 255), const std::string& material = "");
+
+        std::vector<sf::FloatRect> getCellBounds() const; // world cell bounds of every individual cell
+        //material name -> if empty then its a shape block
+        std::string getMaterial() const;
+        void setMaterial(const std::string& material);
 
         void setPosition(sf::Vector2f pos);
         sf::Vector2f getPosition() const;
@@ -26,4 +31,5 @@ class Block
         std::vector<Cell> m_cells; // only the selected squares
         sf::Vector2f m_anchor; // current world posiition
         float m_cellSize; // size of each square
+        std::string m_material;
 };

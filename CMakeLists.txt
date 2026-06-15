@@ -16,6 +16,7 @@ add_executable(ShapeBuilder
     src/ui/Dialog.cpp
     src/audio/AudioManager.cpp
     src/shapes/ShapeManager.cpp
+    src/physics/Physics.cpp
 )
 
 target_include_directories(ShapeBuilder PRIVATE src -Wall -Wextra)

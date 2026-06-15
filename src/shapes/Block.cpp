@@ -6,6 +6,7 @@
 Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color)
     : m_anchor(anchor),
     m_cellSize(35.f) //ecah square 35x35 px
+    m_material(material)
 {
     float gap = 2.f; // small gap btn squares
 
@@ -45,6 +46,25 @@ void Block::setPosition(sf::Vector2f pos)
         cell.shape.setPosition(m_anchor + cell.localOffset);
 }
 
+
+std::vector<sf::FloatRect> Block::getCellBounds() const
+{
+    std::vector<sf::FloatRect> bounds;
+    for (const auto& cells : m_cells)
+        bounds.push_back(cell.shape.getGlobalBounds());
+    return bounds;
+}
+
+std::string Block::getMaterial() const
+{
+    return m_material;
+}
+
+
+void Block::setMaterial(const std::string& m)
+{
+    m_material = m;
+}
 
 sf::Vector2f Block::getPosition() const
 {
