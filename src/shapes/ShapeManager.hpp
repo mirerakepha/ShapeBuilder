@@ -2,6 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Block.hpp"
+#include "ball/Ball.hpp"
+#include "audio/AudioManager.hpp"
+#include "physics/Physics.hpp"
 
 class ShapeManager
 {
@@ -13,7 +16,8 @@ class ShapeManager
         void update(sf::Vector2f mousePos);
         void undo();
         void draw(sf::RenderWindow& window);
-        void spawnMaterialBlock(sf::Color color, sf::Vector2f center);
+        void spawnMaterialBlock(sf::Color color, sf::Vector2f center, const std::string& material = "");
+        void resolveCollisions(Ball& ball, AudioManager& audio);
     private:
         std::vector<Block> m_blocks;
 

@@ -43,6 +43,23 @@ float Ball::getRadius() const
     return RADIUS;
 }
 
+
+sf::Vector2f Ball::getVelocity() const
+{
+    return m_velocity;
+}
+
+void Ball::setVelocity(sf::Vector2f v)
+{
+    m_velocity = v;
+}
+
+void Ball::move(sf::Vector2f offset)
+{
+    m_shape.move(offset);
+}
+
+
 void Ball::update(float dt)
 {
     if (!m_active) return;

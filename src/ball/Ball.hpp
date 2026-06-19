@@ -14,6 +14,11 @@ class Ball
 
         sf::Vector2f getPosition() const;
         float getRadius() const;
+
+        sf::Vector2f getVelocity() const;
+        void setVelocity(sf::Vector2f v);
+
+        void move(sf::Vector2f offset);
     private:
         sf::CircleShape m_shape;
         sf::Vector2f m_velocity;

@@ -3,9 +3,12 @@
 #include <limits>
 
 
-Block::Block(const std::array<bool, 9>& pattern, sf::Vector2f anchor, sf::Color color)
+Block::Block(const std::array<bool, 9>& pattern, 
+        sf::Vector2f anchor, 
+        sf::Color color, 
+        const std::string& material)
     : m_anchor(anchor),
-    m_cellSize(35.f) //ecah square 35x35 px
+    m_cellSize(35.f), //ecah square 35x35 px
     m_material(material)
 {
     float gap = 2.f; // small gap btn squares
@@ -50,7 +53,7 @@ void Block::setPosition(sf::Vector2f pos)
 std::vector<sf::FloatRect> Block::getCellBounds() const
 {
     std::vector<sf::FloatRect> bounds;
-    for (const auto& cells : m_cells)
+    for (const auto& cell : m_cells)
         bounds.push_back(cell.shape.getGlobalBounds());
     return bounds;
 }

@@ -127,7 +127,7 @@ int main()
                     for (int i = 0; i < mat.count; i++)
                     {
                         sf::Vector2f pos(worldCenter.x + offsetX, worldCenter.y);
-                        shapes.spawnMaterialBlock(mat.color, pos);
+                        shapes.spawnMaterialBlock(mat.color, pos, mat.name);
                         offsetX += 50.f;
                     }
                 }
@@ -144,6 +144,7 @@ int main()
         camera.update();
         shapes.update(worldMouse);
         ball.update(dt);
+        shapes.resolveCollisions(ball, audio);
 
         window.clear(sf::Color(30, 30, 30));
         

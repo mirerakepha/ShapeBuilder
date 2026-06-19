@@ -75,7 +75,7 @@ void ShapeManager::handleEvent(const sf::Event& event, sf::Vector2f mousePos)
 }
 
 
-void ShapeManager::spawnMaterialBlock(sf::Color color, sf::Vector2f center)
+void ShapeManager::spawnMaterialBlock(sf::Color color, sf::Vector2f center, const std::string& material)
 {
     /// a single square
     std::array<bool, 9> pattern{};
@@ -85,7 +85,7 @@ void ShapeManager::spawnMaterialBlock(sf::Color color, sf::Vector2f center)
     float offset = (3 * 35.f + 2 * 2.f) / 2.f;
     sf::Vector2f anchor(center.x - offset, center.y - offset);
 
-    m_blocks.emplace_back(pattern, anchor, color);
+    m_blocks.emplace_back(pattern, anchor, color, material);
 }
 
 void ShapeManager::update(sf::Vector2f mousePos)
@@ -93,39 +93,58 @@ void ShapeManager::update(sf::Vector2f mousePos)
 
     if (m_dragIndex < 0 || m_dragIndex >= static_cast<int>(m_blocks.size())) return;
     m_blocks[m_dragIndex].setPosition(mousePos + m_dragOffset);
-    /*
-    // drag a block
-    if (m_dragIndex != -1)
+   
+}
+
+void ShapeManager::resolveCollisions(Ball& ball, AudioManager& audio)
+{
+    if (!ball.isActive()) return;
+
+    sf::Vector2f ballPos = ball.getPosition();
+    float ballRadius = ball.getRadius();
+    sf::Vector2f velocity = ball.getVelocity();
+
+    bool hitThisFrame = false;
+
+    for (auto& block : m_blocks)
     {
-        m_blocks[m_dragIndex].setPosition(mousePos + m_dragOffset);
-        //clamp the block inside the window
-        sf::FloatRect bounds = m_blocks[m_dragIndex].getBounds();
+        for (const auto& cellRect : block.getCellBounds())
+        {
+            CollisionResult result = Physics::circleRect(
+                    ballPos, ballRadius, cellRect, block.getMaterial()
+                    );
+            if (result.hit)
+            {
+                // push ball out of surface so it doesnt sink in
+                ball.move(result.normal * result.penetration);
 
-        sf::Vector2f pos = m_blocks[m_dragIndex].getPosition();
+                // ball pos after push
+                ballPos = ball.getPosition();
 
-        // window size
-        float ww = static_cast<float>(windowSize.x);
-        float wh = static_cast<float>(windowSize.y);
+                // reflect velocity >> bounciness varies by material
+                float bounciness = 0.75f;
+                if (result.material == "Steel") bounciness = 0.9f;
+                else if (result.material == "Wood") bounciness = 0.60f; 
+                else if (result.material == "Plastic") bounciness = 0.70f; 
+                else if (result.material == "Glass") bounciness = 0.85f; 
+                else if (result.material == "Iron") bounciness = 0.50f;
 
-        // distance from anchor to edges
-        float toLeft = pos.x - bounds.left;
-        float toTop = pos.y - bounds.top;
-        float toRight = (bounds.left - bounds.width) - pos.x;
-        float toBottom = (bounds.top - bounds.height) - pos.y;
+                velocity = Physics::reflect(velocity, result.normal, bounciness);
 
-        // clamp such that none of the edges get out of the window
-        if (bounds.left < 0)
-            pos.x = toLeft;
-        if (bounds.top < 0)
-            pos.y = toTop;
-        if (bounds.left + bounds.width > windowSize.x)
-            pos.x = ww - toRight;
-        if (bounds.top + bounds.height > windowSize.y)
-            pos.y = wh - toBottom;
+                // onlyplay sound once per frame if hitting multiple cells
+                if (!hitThisFrame)
+                {
+                    if (result.material.empty())
+                        audio.playDefaultBounce();
+                    else 
+                        audio.playBounce(result.material);
 
-        m_blocks[m_dragIndex].setPosition(pos);
+                    hitThisFrame = true;
+                }
+            }
+        }
     }
-    */
+    ball.setVelocity(velocity);
 }
 
 void ShapeManager::undo()
